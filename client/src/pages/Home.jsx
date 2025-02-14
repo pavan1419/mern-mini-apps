@@ -41,6 +41,12 @@ const Home = () => {
       path: '/coin-flipper',
       icon: '🪙',
     },
+    {
+      title: 'Pomodoro Timer',
+      description: 'Stay focused and productive with Pomodoro technique',
+      path: '/pomodoro',
+      icon: '⏱️',
+    },
   ];
 
   return (
