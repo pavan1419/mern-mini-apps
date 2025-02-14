@@ -51,9 +51,10 @@ const Counter = () => {
           borderRadius: { xs: 2, sm: 3 },
           backgroundColor: 'background.paper',
           boxShadow: theme.shadows[3],
+          textAlign: 'center',
         }}
       >
-        <Typography variant='h4' color='text.primary'>
+        <Typography variant='h4' color='text.primary' gutterBottom>
           Counter
         </Typography>
 

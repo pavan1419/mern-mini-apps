@@ -1,7 +1,9 @@
 import React from 'react';
-import { IconButton, Menu, MenuItem, useTheme } from '@mui/material';
+import { IconButton, Menu, MenuItem, useTheme, Box } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 const NavbarMenu = ({ isDarkMode, toggleTheme, navItems }) => {
   const theme = useTheme();
@@ -19,10 +21,8 @@ const NavbarMenu = ({ isDarkMode, toggleTheme, navItems }) => {
     <>
       <IconButton
         edge='end'
-        color='inherit'
         onClick={handleMenu}
         sx={{
-          ml: 1,
           color: 'text.primary',
           '&:hover': {
             backgroundColor: 'action.hover',
@@ -45,6 +45,8 @@ const NavbarMenu = ({ isDarkMode, toggleTheme, navItems }) => {
             backdropFilter: 'blur(8px)',
             border: 1,
             borderColor: 'divider',
+            borderRadius: 2,
+            minWidth: 200,
           },
         }}
       >
@@ -54,9 +56,18 @@ const NavbarMenu = ({ isDarkMode, toggleTheme, navItems }) => {
             component={RouterLink}
             to={item.path}
             onClick={handleClose}
-            sx={{ minWidth: 120 }}
+            sx={{
+              py: 1,
+              px: 2,
+              '&:hover': {
+                backgroundColor: 'action.hover',
+              },
+            }}
           >
-            {item.label}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <span>{item.icon}</span>
+              {item.label}
+            </Box>
           </MenuItem>
         ))}
         <MenuItem
@@ -64,8 +75,27 @@ const NavbarMenu = ({ isDarkMode, toggleTheme, navItems }) => {
             toggleTheme();
             handleClose();
           }}
+          sx={{
+            py: 1,
+            px: 2,
+            '&:hover': {
+              backgroundColor: 'action.hover',
+            },
+          }}
         >
-          {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            {isDarkMode ? (
+              <>
+                <Brightness7Icon fontSize='small' />
+                Light Mode
+              </>
+            ) : (
+              <>
+                <Brightness4Icon fontSize='small' />
+                Dark Mode
+              </>
+            )}
+          </Box>
         </MenuItem>
       </Menu>
     </>

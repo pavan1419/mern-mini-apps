@@ -35,68 +35,43 @@ const Home = () => {
       path: '/money',
       icon: '💱',
     },
+    {
+      title: 'Coin Flipper',
+      description: 'Flip a coin and get heads or tails',
+      path: '/coin-flipper',
+      icon: '🪙',
+    },
   ];
 
   return (
-    <Container maxWidth='lg' sx={{ py: { xs: 2, sm: 3, md: 4 } }}>
-      <Typography
-        variant='h3'
-        component='h1'
-        gutterBottom
-        sx={{
-          fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
-          textAlign: 'center',
-          mb: { xs: 2, sm: 3, md: 4 },
-        }}
-      >
+    <Container maxWidth='md' sx={{ py: 4 }}>
+      <Typography variant='h3' align='center' gutterBottom>
         Welcome to Mini Apps
       </Typography>
-
-      <Grid container spacing={{ xs: 2, sm: 3 }} justifyContent='center'>
-        {apps.map((app, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
+      <Typography variant='body1' align='center' gutterBottom>
+        Explore our collection of mini applications.
+      </Typography>
+      <Grid container spacing={4} justifyContent='center'>
+        {apps.map((app) => (
+          <Grid item xs={12} sm={6} md={4} key={app.title}>
             <Card
               sx={{
                 height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                p: { xs: 2, sm: 3 },
+                justifyContent: 'space-between',
                 cursor: 'pointer',
-                transition: 'transform 0.2s ease-in-out',
                 '&:hover': {
-                  transform: 'translateY(-4px)',
+                  boxShadow: theme.shadows[6],
                 },
               }}
               onClick={() => navigate(app.path)}
             >
               <CardContent>
-                <Typography
-                  variant='h2'
-                  sx={{
-                    fontSize: { xs: '2.5rem', sm: '3rem' },
-                    textAlign: 'center',
-                    mb: 2,
-                  }}
-                >
-                  {app.icon}
+                <Typography variant='h5' component='div' gutterBottom>
+                  {app.icon} {app.title}
                 </Typography>
-                <Typography
-                  variant='h5'
-                  sx={{
-                    fontSize: { xs: '1.25rem', sm: '1.5rem' },
-                    mb: 1,
-                    textAlign: 'center',
-                  }}
-                >
-                  {app.title}
-                </Typography>
-                <Typography
-                  variant='body2'
-                  sx={{
-                    textAlign: 'center',
-                    fontSize: { xs: '0.875rem', sm: '1rem' },
-                  }}
-                >
+                <Typography variant='body2' color='text.secondary'>
                   {app.description}
                 </Typography>
               </CardContent>

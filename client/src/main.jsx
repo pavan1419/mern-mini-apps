@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import { createAppTheme } from './theme';
 import App from './App';
-import './index.css';
+// import './index.css';
 
 const Main = () => {
   const [mode, setMode] = useState('dark');
