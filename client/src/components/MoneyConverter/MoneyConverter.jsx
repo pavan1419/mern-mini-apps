@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Container,
-  Paper,
-  Typography,
-  TextField,
-  MenuItem,
-  Button,
-  Grid,
-  CircularProgress,
-  Alert,
-  Divider,
-  IconButton,
-  Tooltip,
-} from '@mui/material';
+import { Container, Paper, Typography, Alert } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import HistoryIcon from '@mui/icons-material/History';
 import { useTheme } from '@mui/material/styles';
+import CurrencyForm from './CurrencyForm';
+import ConversionResult from './ConversionResult';
+import ConversionHistory from './ConversionHistory';
 
 const MoneyConverter = () => {
   const theme = useTheme();
@@ -121,183 +109,35 @@ const MoneyConverter = () => {
             </Alert>
           )}
 
-          <Grid container spacing={3} alignItems='center'>
-            <Grid item xs={12} sm={4}>
-              <TextField
-                select
-                fullWidth
-                label='From'
-                value={fromCurrency}
-                onChange={(e) => setFromCurrency(e.target.value)}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: theme.palette.divider,
-                    },
-                    '&:hover fieldset': {
-                      borderColor: theme.palette.primary.main,
-                    },
-                  },
-                }}
-              >
-                {availableCurrencies.map((currency) => (
-                  <MenuItem key={currency.code} value={currency.code}>
-                    {currency.code} ({currency.rate})
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-
-            <Grid item xs={12} sm={1}>
-              <Tooltip title='Swap currencies'>
-                <IconButton onClick={handleSwapCurrencies} color='primary'>
-                  <SwapHorizIcon />
-                </IconButton>
-              </Tooltip>
-            </Grid>
-
-            <Grid item xs={12} sm={3}>
-              <TextField
-                fullWidth
-                type='number'
-                label='Amount'
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                error={amount < 0}
-                helperText={amount < 0 ? 'Amount cannot be negative' : ''}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: theme.palette.divider,
-                    },
-                    '&:hover fieldset': {
-                      borderColor: theme.palette.primary.main,
-                    },
-                  },
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={4}>
-              <TextField
-                select
-                fullWidth
-                label='To'
-                value={toCurrency}
-                onChange={(e) => setToCurrency(e.target.value)}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: theme.palette.divider,
-                    },
-                    '&:hover fieldset': {
-                      borderColor: theme.palette.primary.main,
-                    },
-                  },
-                }}
-              >
-                {availableCurrencies.map((currency) => (
-                  <MenuItem key={currency.code} value={currency.code}>
-                    {currency.code} ({currency.rate})
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
-          </Grid>
-
-          <Button
-            variant='contained'
-            fullWidth
-            onClick={handleConvert}
-            disabled={loading || !amount || amount < 0}
-            sx={{
-              mt: 3,
-              bgcolor: theme.palette.primary.main,
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-              },
-            }}
-          >
-            {loading ? <CircularProgress size={24} /> : 'Convert'}
-          </Button>
+          <CurrencyForm
+            amount={amount}
+            fromCurrency={fromCurrency}
+            toCurrency={toCurrency}
+            availableCurrencies={availableCurrencies}
+            loading={loading}
+            onAmountChange={(e) => setAmount(e.target.value)}
+            onFromCurrencyChange={(e) => setFromCurrency(e.target.value)}
+            onToCurrencyChange={(e) => setToCurrency(e.target.value)}
+            onSwapCurrencies={handleSwapCurrencies}
+            onConvert={handleConvert}
+          />
 
           <AnimatePresence>
             {result && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-              >
-                <Paper
-                  variant='outlined'
-                  sx={{
-                    p: 2,
-                    mt: 3,
-                    textAlign: 'center',
-                    bgcolor: theme.palette.action.hover,
-                    borderColor: theme.palette.divider,
-                  }}
-                >
-                  <Typography variant='h5'>
-                    {amount} {fromCurrency} = {result.result} {toCurrency}
-                  </Typography>
-                  <Typography variant='caption' color='text.secondary'>
-                    {new Date(result.timestamp).toLocaleString()}
-                  </Typography>
-                </Paper>
-              </motion.div>
+              <ConversionResult
+                result={result}
+                amount={amount}
+                fromCurrency={fromCurrency}
+                toCurrency={toCurrency}
+              />
             )}
           </AnimatePresence>
 
-          <Divider sx={{ my: 4 }} />
-
-          <Grid container alignItems='center' spacing={2}>
-            <Grid item>
-              <Typography variant='h6'>Conversion History</Typography>
-            </Grid>
-            <Grid item>
-              <Tooltip title={showHistory ? 'Hide history' : 'Show history'}>
-                <IconButton onClick={() => setShowHistory(!showHistory)}>
-                  <HistoryIcon />
-                </IconButton>
-              </Tooltip>
-            </Grid>
-          </Grid>
-
-          <AnimatePresence>
-            {showHistory && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {history.map((item) => (
-                  <Paper
-                    key={item.id}
-                    variant='outlined'
-                    sx={{
-                      p: 2,
-                      mt: 2,
-                      bgcolor: theme.palette.action.hover,
-                      borderColor: theme.palette.divider,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        bgcolor: theme.palette.action.selected,
-                      },
-                    }}
-                  >
-                    <Typography>
-                      {item.amount} {item.from} = {item.result} {item.to}
-                    </Typography>
-                    <Typography variant='caption' color='text.secondary'>
-                      {new Date(item.timestamp).toLocaleString()}
-                    </Typography>
-                  </Paper>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <ConversionHistory
+            history={history}
+            showHistory={showHistory}
+            onToggleHistory={() => setShowHistory(!showHistory)}
+          />
         </Paper>
       </motion.div>
     </Container>
