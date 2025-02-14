@@ -47,6 +47,12 @@ const Home = () => {
       path: '/pomodoro',
       icon: '⏱️',
     },
+    {
+      title: 'Quote Generator',
+      description: 'Get inspired with random quotes from famous authors',
+      path: '/quotes',
+      icon: '💭',
+    },
   ];
 
   return (

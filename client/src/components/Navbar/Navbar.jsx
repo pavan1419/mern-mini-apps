@@ -37,6 +37,7 @@ const Navbar = ({ toggleTheme }) => {
     { path: '/money', label: 'Currency', icon: '💱' },
     { path: '/coin-flipper', label: 'Coin Flipper', icon: '🪙' },
     { path: '/pomodoro', label: 'Pomodoro', icon: '⏱️' },
+    { path: '/quotes', label: 'Quotes', icon: '💭' },
   ];
 
   return (

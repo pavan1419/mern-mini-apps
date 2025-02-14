@@ -9,6 +9,7 @@ import { MoneyConverter } from './components/MoneyConverter';
 import { CoinFlipper } from './components/CoinFlipper';
 import Footer from './components/Footer/Footer';
 import { PomodoroTimer } from './components/PomodoroTimer';
+import { QuoteGenerator } from './components/QuoteGenerator';
 // import './App.css';
 
 const App = ({ toggleTheme }) => {
@@ -37,6 +38,7 @@ const App = ({ toggleTheme }) => {
                 <Route path='/money' element={<MoneyConverter />} />
                 <Route path='/coin-flipper' element={<CoinFlipper />} />
                 <Route path='/pomodoro' element={<PomodoroTimer />} />
+                <Route path='/quotes' element={<QuoteGenerator />} />
               </Routes>
             </Box>
           </Container>
