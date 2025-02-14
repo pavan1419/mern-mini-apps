@@ -23,6 +23,29 @@ const userSchema = new mongoose.Schema(
       minlength: [6, 'Password must be at least 6 characters long'],
       select: false,
     },
+    firstName: {
+      type: String,
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      trim: true,
+    },
+    avatar: {
+      type: String,
+      default: '',
+    },
+    preferences: {
+      theme: {
+        type: String,
+        enum: ['light', 'dark'],
+        default: 'light',
+      },
+      notifications: {
+        type: Boolean,
+        default: true,
+      },
+    },
     createdAt: {
       type: Date,
       default: Date.now,

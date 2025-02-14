@@ -1,18 +1,31 @@
 const errorHandler = (err, req, res, next) => {
-  const status = err.status || 500;
-  const message = err.message || 'Internal Server Error';
+  console.error(err.stack);
 
-  // Log error for debugging
-  console.error(`[Error] ${status}: ${message}`);
-  if (process.env.NODE_ENV === 'development') {
-    console.error(err.stack);
+  if (err.name === 'ValidationError') {
+    return res.status(400).json({
+      success: false,
+      error: {
+        message: err.message,
+        status: 400,
+      },
+    });
   }
 
-  res.status(status).json({
+  if (err.name === 'JsonWebTokenError') {
+    return res.status(401).json({
+      success: false,
+      error: {
+        message: 'Invalid token',
+        status: 401,
+      },
+    });
+  }
+
+  res.status(500).json({
     success: false,
     error: {
-      message,
-      status,
+      message: 'Server Error',
+      status: 500,
     },
   });
 };
