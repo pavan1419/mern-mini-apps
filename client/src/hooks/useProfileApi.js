@@ -13,14 +13,17 @@ const useProfileApi = () => {
     setSuccess('');
 
     try {
-      const response = await fetch(`http://localhost:5000/api/users${url}`, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `https://mern-mini-apps.onrender.com/api/users${url}`,
+        {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       const result = await response.json();
 

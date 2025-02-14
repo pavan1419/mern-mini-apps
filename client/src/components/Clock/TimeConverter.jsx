@@ -28,7 +28,7 @@ const TimeConverter = () => {
       setLoading(true);
       setError(null);
       const response = await fetch(
-        `http://localhost:5000/api/time/${selectedTimezone}`
+        `https://mern-mini-apps.onrender.com/api/time/${selectedTimezone}`
       );
       const result = await response.json();
 
