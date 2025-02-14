@@ -15,7 +15,7 @@ const QuoteGenerator = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `http://localhost:5000/api/quotes/random${
+        `https://mern-mini-apps.onrender.com/api/quotes/random${
           category ? `?category=${category}` : ''
         }`
       );
