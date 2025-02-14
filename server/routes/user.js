@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
-const { loginLimiter } = require('../middleware/rateLimiter');
-const {
-  register,
-  login,
-  getCurrentUser,
-  updateProfile,
-} = require('../controllers/userController');
+const userController = require('../controllers/userController');
+const auth = require('../middleware/auth');
 
-router.post('/register', register);
-router.post('/login', loginLimiter, login);
-router.get('/me', protect, getCurrentUser);
-router.put('/profile', protect, updateProfile);
+// Auth routes
+router.post('/register', userController.register);
+router.post('/login', userController.login);
+
+// Protected routes
+router.get('/me', auth.protect, userController.getCurrentUser);
+router.get('/profile', auth.protect, userController.getUserProfile);
+router.put('/profile', auth.protect, userController.updateProfile);
+router.put('/change-password', auth.protect, userController.changePassword);
+router.delete('/profile', auth.protect, userController.deleteProfile);
 
 module.exports = router;
