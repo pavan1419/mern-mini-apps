@@ -31,10 +31,6 @@ const AppRoutes = () => {
       <Route path='/' element={<Home />} />
       <Route path='/counter' element={<Counter />} />
       <Route path='/clock' element={<Clock />} />
-      <Route path='/money' element={<MoneyConverter />} />
-      <Route path='/coin-flipper' element={<CoinFlipper />} />
-      <Route path='/pomodoro' element={<PomodoroTimer />} />
-      <Route path='/quotes' element={<QuoteGenerator />} />
 
       {/* Auth Routes */}
       <Route
@@ -47,6 +43,38 @@ const AppRoutes = () => {
       />
 
       {/* Protected Routes */}
+      <Route
+        path='/money'
+        element={
+          <ProtectedRoute>
+            <MoneyConverter />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='/coin-flipper'
+        element={
+          <ProtectedRoute>
+            <CoinFlipper />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='/pomodoro'
+        element={
+          <ProtectedRoute>
+            <PomodoroTimer />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='/quotes'
+        element={
+          <ProtectedRoute>
+            <QuoteGenerator />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path='/profile'
         element={

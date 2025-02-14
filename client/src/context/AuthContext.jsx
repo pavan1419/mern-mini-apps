@@ -9,12 +9,31 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetchUser(token);
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
+
+  const fetchUser = async (token) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/users/me', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data.success) {
+        setUser(data.data.user);
+      }
+    } catch (error) {
+      console.error('Failed to fetch user data', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const login = async (email, password) => {
     try {
@@ -30,7 +49,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error(data.error.message);
       }
 
-      localStorage.setItem('user', JSON.stringify(data.data.user));
+      localStorage.setItem('token', data.data.token);
       setUser(data.data.user);
       navigate('/');
       return { success: true };
@@ -53,7 +72,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error(data.error.message);
       }
 
-      localStorage.setItem('user', JSON.stringify(data.data.user));
+      localStorage.setItem('token', data.data.token);
       setUser(data.data.user);
       navigate('/');
       return { success: true };
@@ -63,7 +82,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     setUser(null);
     navigate('/login');
   };

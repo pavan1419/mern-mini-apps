@@ -31,10 +31,11 @@ const register = async (req, res) => {
         },
       });
     }
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
       username,
       email,
-      password,
+      password: hashedPassword,
       firstName,
       lastName,
     });

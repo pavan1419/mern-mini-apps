@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Card,
@@ -32,6 +32,17 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState('');
 
+  useEffect(() => {
+    const savedFormData = localStorage.getItem('registerFormData');
+    if (savedFormData) {
+      setFormData(JSON.parse(savedFormData));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('registerFormData', JSON.stringify(formData));
+  }, [formData]);
+
   const validateForm = () => {
     const newErrors = {};
     if (!formData.username || formData.username.length < 3) {
@@ -59,6 +70,7 @@ const Register = () => {
       if (!result.success) {
         setServerError(result.error);
       } else {
+        localStorage.removeItem('registerFormData');
         navigate('/');
       }
     } catch (error) {
