@@ -7,9 +7,10 @@ import {
   Tooltip,
   Button,
   CircularProgress,
+  Box,
 } from '@mui/material';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import { useTheme } from '@mui/material/styles';
+import { motion } from 'framer-motion';
 
 const CurrencyForm = ({
   amount,
@@ -23,30 +24,22 @@ const CurrencyForm = ({
   onSwapCurrencies,
   onConvert,
 }) => {
-  const theme = useTheme();
-
-  const textFieldStyle = {
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: theme.palette.divider,
-      },
-      '&:hover fieldset': {
-        borderColor: theme.palette.primary.main,
-      },
-    },
-  };
-
   return (
-    <>
-      <Grid container spacing={3} alignItems='center'>
-        <Grid item xs={12} sm={4}>
+    <Box sx={{ width: '100%' }}>
+      <Grid
+        container
+        spacing={{ xs: 2, md: 3 }}
+        alignItems='center'
+        justifyContent='center'
+      >
+        <Grid item xs={12} sm={5} md={4}>
           <TextField
             select
             fullWidth
             label='From'
             value={fromCurrency}
             onChange={onFromCurrencyChange}
-            sx={textFieldStyle}
+            variant='outlined'
           >
             {availableCurrencies.map((currency) => (
               <MenuItem key={currency.code} value={currency.code}>
@@ -56,15 +49,48 @@ const CurrencyForm = ({
           </TextField>
         </Grid>
 
-        <Grid item xs={12} sm={1}>
+        <Grid
+          item
+          xs={12}
+          sm='auto'
+          sx={{
+            display: 'flex',
+            justifyContent: { xs: 'center', sm: 'flex-start' },
+            order: { xs: 3, sm: 2 },
+          }}
+        >
           <Tooltip title='Swap currencies'>
-            <IconButton onClick={onSwapCurrencies} color='primary'>
+            <IconButton
+              onClick={onSwapCurrencies}
+              color='primary'
+              component={motion.button}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              sx={{ mx: { xs: 0, sm: 1 } }}
+            >
               <SwapHorizIcon />
             </IconButton>
           </Tooltip>
         </Grid>
 
-        <Grid item xs={12} sm={3}>
+        <Grid item xs={12} sm={5} md={4} sx={{ order: { xs: 2, sm: 3 } }}>
+          <TextField
+            select
+            fullWidth
+            label='To'
+            value={toCurrency}
+            onChange={onToCurrencyChange}
+            variant='outlined'
+          >
+            {availableCurrencies.map((currency) => (
+              <MenuItem key={currency.code} value={currency.code}>
+                {currency.code} ({currency.rate})
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={4} sx={{ order: 4 }}>
           <TextField
             fullWidth
             type='number'
@@ -72,45 +98,51 @@ const CurrencyForm = ({
             value={amount}
             onChange={onAmountChange}
             error={amount < 0}
-            helperText={amount < 0 ? 'Amount cannot be negative' : ''}
-            sx={textFieldStyle}
+            helperText={amount < 0 ? "Amount can't be negative" : ''}
+            variant='outlined'
+            InputProps={{
+              inputProps: { min: 0 },
+            }}
           />
         </Grid>
 
-        <Grid item xs={12} sm={4}>
-          <TextField
-            select
-            fullWidth
-            label='To'
-            value={toCurrency}
-            onChange={onToCurrencyChange}
-            sx={textFieldStyle}
-          >
-            {availableCurrencies.map((currency) => (
-              <MenuItem key={currency.code} value={currency.code}>
-                {currency.code} ({currency.rate})
-              </MenuItem>
-            ))}
-          </TextField>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            order: 5,
+            display: 'flex',
+            justifyContent: 'center',
+            mt: { xs: 2, sm: 3 },
+          }}
+        >
+          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <Button
+              variant='contained'
+              onClick={onConvert}
+              disabled={loading || !amount || amount < 0}
+              sx={{
+                px: { xs: 4, sm: 6 },
+                py: { xs: 1, sm: 1.5 },
+                borderRadius: 2,
+                fontSize: { xs: '1rem', sm: '1.1rem' },
+                minWidth: { xs: '200px', sm: '250px' },
+                boxShadow: 2,
+                '&:hover': {
+                  boxShadow: 4,
+                },
+              }}
+            >
+              {loading ? (
+                <CircularProgress size={24} color='inherit' />
+              ) : (
+                'Convert'
+              )}
+            </Button>
+          </motion.div>
         </Grid>
       </Grid>
-
-      <Button
-        variant='contained'
-        fullWidth
-        onClick={onConvert}
-        disabled={loading || !amount || amount < 0}
-        sx={{
-          mt: 3,
-          bgcolor: theme.palette.primary.main,
-          '&:hover': {
-            bgcolor: theme.palette.primary.dark,
-          },
-        }}
-      >
-        {loading ? <CircularProgress size={24} /> : 'Convert'}
-      </Button>
-    </>
+    </Box>
   );
 };
 

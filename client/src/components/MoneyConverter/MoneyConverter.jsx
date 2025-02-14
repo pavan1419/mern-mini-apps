@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Paper, Typography, Alert } from '@mui/material';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@mui/material/styles';
+import {
+  Container,
+  Paper,
+  Typography,
+  Box,
+  useTheme,
+  Card,
+  CardContent,
+} from '@mui/material';
+import { motion } from 'framer-motion';
 import CurrencyForm from './CurrencyForm';
 import ConversionResult from './ConversionResult';
 import ConversionHistory from './ConversionHistory';
@@ -85,61 +92,70 @@ const MoneyConverter = () => {
   };
 
   return (
-    <Container maxWidth='md' sx={{ py: 4 }}>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Paper
-          elevation={3}
-          sx={{
-            p: 4,
-            backgroundColor: theme.palette.background.paper,
-            color: theme.palette.text.primary,
-          }}
+    <Container maxWidth='md'>
+      <Box sx={{ py: 4 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
         >
-          <Typography variant='h4' gutterBottom align='center'>
-            Currency Converter
-          </Typography>
+          <Card
+            elevation={theme.palette.mode === 'dark' ? 2 : 1}
+            sx={{
+              bgcolor: 'background.paper',
+              borderRadius: 2,
+              overflow: 'hidden',
+              border: 1,
+              borderColor: 'divider',
+            }}
+          >
+            <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+              <Typography
+                variant='h4'
+                align='center'
+                gutterBottom
+                sx={{
+                  color: 'primary.main',
+                  fontWeight: 600,
+                  fontSize: { xs: '1.75rem', sm: '2.125rem' },
+                }}
+              >
+                Currency Converter
+              </Typography>
 
-          {error && (
-            <Alert severity='error' sx={{ mb: 3 }}>
-              {error}
-            </Alert>
-          )}
+              <Box sx={{ mb: 4 }}>
+                <CurrencyForm
+                  amount={amount}
+                  fromCurrency={fromCurrency}
+                  toCurrency={toCurrency}
+                  availableCurrencies={availableCurrencies}
+                  loading={loading}
+                  onAmountChange={(e) => setAmount(e.target.value)}
+                  onFromCurrencyChange={(e) => setFromCurrency(e.target.value)}
+                  onToCurrencyChange={(e) => setToCurrency(e.target.value)}
+                  onSwapCurrencies={handleSwapCurrencies}
+                  onConvert={handleConvert}
+                />
+              </Box>
 
-          <CurrencyForm
-            amount={amount}
-            fromCurrency={fromCurrency}
-            toCurrency={toCurrency}
-            availableCurrencies={availableCurrencies}
-            loading={loading}
-            onAmountChange={(e) => setAmount(e.target.value)}
-            onFromCurrencyChange={(e) => setFromCurrency(e.target.value)}
-            onToCurrencyChange={(e) => setToCurrency(e.target.value)}
-            onSwapCurrencies={handleSwapCurrencies}
-            onConvert={handleConvert}
-          />
+              <motion.div layout>
+                <ConversionResult
+                  result={result}
+                  amount={amount}
+                  fromCurrency={fromCurrency}
+                  toCurrency={toCurrency}
+                />
+              </motion.div>
 
-          <AnimatePresence>
-            {result && (
-              <ConversionResult
-                result={result}
-                amount={amount}
-                fromCurrency={fromCurrency}
-                toCurrency={toCurrency}
+              <ConversionHistory
+                history={history}
+                showHistory={showHistory}
+                onToggleHistory={() => setShowHistory(!showHistory)}
               />
-            )}
-          </AnimatePresence>
-
-          <ConversionHistory
-            history={history}
-            showHistory={showHistory}
-            onToggleHistory={() => setShowHistory(!showHistory)}
-          />
-        </Paper>
-      </motion.div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </Box>
     </Container>
   );
 };
