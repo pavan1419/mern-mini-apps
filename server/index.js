@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
-const connectDB = require('./config/db');
+const connectDB = require('./db');
 const errorHandler = require('./middleware/errorHandler');
 const moneyRoutes = require('./routes/money');
 const userRoutes = require('./routes/user');
