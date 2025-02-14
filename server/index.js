@@ -1,8 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+require('dotenv').config();
+const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
 const moneyRoutes = require('./routes/money');
+const userRoutes = require('./routes/user');
+
+// Connect to MongoDB
+connectDB();
 
 const app = express();
 
@@ -26,7 +32,9 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Routes
 app.use('/api/money', moneyRoutes);
+app.use('/api/users', userRoutes);
 
 // 404 handler
 app.use((req, res) => {
